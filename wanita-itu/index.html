@@ -1747,26 +1747,27 @@ html, body {
         <p class="form-desc">Dr Amy reads every submission personally. Response within 48 hours.</p>
       </div>
       <div class="form-card anim-2">
-        <div id="form-fields">
+        <form id="form-fields" name="partnership-interest" data-netlify="true">
+          <input type="hidden" name="form-name" value="partnership-interest">
           <div class="form-group">
             <label class="form-label">Brand / Company <span class="req">*</span></label>
-            <input class="form-input" type="text" placeholder="e.g. Tealive Malaysia" id="f-brand">
+            <input class="form-input" type="text" placeholder="e.g. Tealive Malaysia" id="f-brand" name="brand">
           </div>
           <div class="form-group">
             <label class="form-label">Your Name <span class="req">*</span></label>
-            <input class="form-input" type="text" placeholder="Your full name" id="f-name">
+            <input class="form-input" type="text" placeholder="Your full name" id="f-name" name="name">
           </div>
           <div class="form-group">
             <label class="form-label">Email <span class="req">*</span></label>
-            <input class="form-input" type="email" placeholder="you@company.com" id="f-email">
+            <input class="form-input" type="email" placeholder="you@company.com" id="f-email" name="email">
           </div>
           <div class="form-group">
             <label class="form-label">Phone / WhatsApp <span class="req">*</span></label>
-            <input class="form-input" type="tel" placeholder="+60 12 345 6789" id="f-phone">
+            <input class="form-input" type="tel" placeholder="+60 12 345 6789" id="f-phone" name="phone">
           </div>
           <div class="form-group">
             <label class="form-label">Brand Category <span class="req">*</span></label>
-            <select class="form-select" id="f-category">
+            <select class="form-select" id="f-category" name="category">
               <option value="" disabled selected>Select category</option>
               <option>Food &amp; Beverage</option>
               <option>Fashion &amp; Apparel</option>
@@ -1782,7 +1783,7 @@ html, body {
           </div>
           <div class="form-group">
             <label class="form-label">Tier of Interest</label>
-            <select class="form-select" id="f-tier">
+            <select class="form-select" id="f-tier" name="tier">
               <option value="" disabled selected>Which tier?</option>
               <option>Supporting Partner (RM5k)</option>
               <option>Brand Partner ✦ (RM15k)</option>
@@ -1792,11 +1793,11 @@ html, body {
           </div>
           <div class="form-group">
             <label class="form-label">Brief Message</label>
-            <textarea class="form-textarea" placeholder="What draws you to Wanita Itu?" id="f-message"></textarea>
+            <textarea class="form-textarea" placeholder="What draws you to Wanita Itu?" id="f-message" name="message"></textarea>
           </div>
-          <button class="form-submit" onclick="submitForm()">Submit My Interest →</button>
+          <button type="button" class="form-submit" onclick="submitForm()">Submit My Interest →</button>
           <div class="form-privacy">Your details are shared only with Dr Amy Ismail.</div>
-        </div>
+        </form>
         <div class="form-success" id="form-success">
           <div class="form-success-icon">✦</div>
           <div class="form-success-title">Received.</div>
@@ -1906,8 +1907,23 @@ function submitForm() {
     }
   });
   if (!valid) return;
-  document.getElementById('form-fields').style.display = 'none';
-  document.getElementById('form-success').style.display = 'block';
+
+  const form = document.getElementById('form-fields');
+  const data = new FormData(form);
+
+  fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams(data).toString()
+  })
+  .then(() => {
+    form.style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+  })
+  .catch(() => {
+    form.style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+  });
 }
 
 // Keyboard navigation (for desktop testing)
