@@ -1928,15 +1928,16 @@ function submitForm() {
     `💎 *Tier:* ${tier || 'Not specified'}\n` +
     `💬 *Message:* ${message || '-'}`;
 
-  fetch('https://api.telegram.org/bot8609039853:AAHrTEIQQkVSC3HjOlOwqywxDJLhzElv_XA/sendMessage', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      chat_id: 420840444,
-      text: text,
-      parse_mode: 'Markdown'
+  const BOT_TOKEN = '8609039853:AAHrTEIQQkVSC3HjOlOwqywxDJLhzElv_XA';
+  const RECIPIENTS = [420840444, 594522714];
+
+  Promise.all(RECIPIENTS.map(chat_id =>
+    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id, text, parse_mode: 'Markdown' })
     })
-  })
+  ))
   .then(() => {
     form.style.display = 'none';
     document.getElementById('form-success').style.display = 'block';
