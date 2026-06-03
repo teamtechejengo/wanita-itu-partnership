@@ -1928,16 +1928,11 @@ function submitForm() {
     `💎 *Tier:* ${tier || 'Not specified'}\n` +
     `💬 *Message:* ${message || '-'}`;
 
-  const BOT_TOKEN = '8609039853:AAHrTEIQQkVSC3HjOlOwqywxDJLhzElv_XA';
-  const RECIPIENTS = [420840444, 594522714];
-
-  Promise.all(RECIPIENTS.map(chat_id =>
-    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id, text, parse_mode: 'Markdown' })
-    })
-  ))
+  fetch('/.netlify/functions/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ brand, name, email, phone, category, tier, message })
+  })
   .then(() => {
     form.style.display = 'none';
     document.getElementById('form-success').style.display = 'block';

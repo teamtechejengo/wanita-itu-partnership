@@ -1,0 +1,3 @@
+[build]
+  publish = "wanita-itu"
+  functions = "netlify/functions"
